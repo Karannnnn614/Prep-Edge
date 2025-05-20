@@ -66,3 +66,6 @@ Let me know if you'd like to add any of the following:
 - 🚀 Deployment Guide  
 - 🖼️ Screenshots & Demo Links  
 
+---
+
+© 2025 PrepEdge All rights reserved.
