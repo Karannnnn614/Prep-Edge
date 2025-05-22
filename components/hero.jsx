@@ -4,32 +4,42 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
   const imageRef = useRef(null);
 
-  useEffect(() => {
-    const imageElement = imageRef.current;
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
 
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const scrollThreshold = 100;
-
-      if (scrollPosition > scrollThreshold) {
-        imageElement.classList.add("scrolled");
-      } else {
-        imageElement.classList.remove("scrolled");
+  const staggerChildren = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
       }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    }
+  };
 
   return (
     <section className="w-full pt-36 md:pt-48 pb-10">
-      <div className="space-y-6 text-center">
-        <div className="space-y-6 mx-auto">
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={staggerChildren}
+        className="space-y-6 text-center"
+      >
+        <motion.div 
+          variants={fadeIn}
+          className="space-y-6 mx-auto"
+        >
           <h1 className="text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl gradient-title animate-gradient">
             Your AI Career Coach for
             <br />
@@ -39,21 +49,34 @@ const HeroSection = () => {
             Advance your career with personalized guidance, interview prep, and
             AI-powered tools for job success.
           </p>
-        </div>
-        <div className="flex justify-center space-x-4">
+        </motion.div>
+
+        <motion.div 
+          variants={fadeIn}
+          className="flex justify-center space-x-4"
+        >
           <Link href="/dashboard">
-            <Button size="lg" className="px-8">
+            <Button size="lg" className="px-8 hover:scale-105 transition-transform">
               Get Started
             </Button>
           </Link>
           <Link href="">
-            <Button size="lg" variant="outline" className="px-8">
+            <Button size="lg" variant="outline" className="px-8 hover:scale-105 transition-transform">
               Watch Demo
             </Button>
           </Link>
-        </div>
-        <div className="hero-image-wrapper mt-5 md:mt-0">
-          <div ref={imageRef} className="hero-image">
+        </motion.div>
+
+        <motion.div 
+          variants={fadeIn}
+          className="hero-image-wrapper mt-5 md:mt-0"
+        >
+          <motion.div 
+            ref={imageRef}
+            className="hero-image"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <Image
               src="/banner4.jpg"
               width={1280}
@@ -62,9 +85,9 @@ const HeroSection = () => {
               className="rounded-lg shadow-2xl border mx-auto"
               priority
             />
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
