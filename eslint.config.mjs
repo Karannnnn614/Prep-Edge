@@ -1,16 +1,10 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+// Using direct export pattern for ESLint Flat Config with Next.js
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: { plugins: {} },
-  allConfig: { plugins: {} }
-});
-
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
-  ...compat.extends("next/core-web-vitals")
+  {
+    extends: [
+      'next/core-web-vitals'
+    ]
+  }
 ];
