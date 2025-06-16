@@ -4,7 +4,7 @@ import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
 
 // Mark this page as dynamic
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const { isOnboarded } = await getUserOnboardingStatus();
@@ -27,7 +27,9 @@ export default async function DashboardPage() {
       </div>
     );
   } catch (error) {
-    if (error.message === "Please complete your industry selection in onboarding") {
+    if (
+      error.message === "Please complete your industry selection in onboarding"
+    ) {
       redirect("/onboarding");
     }
 
@@ -35,7 +37,9 @@ export default async function DashboardPage() {
     return (
       <div className="container mx-auto mt-8 p-4">
         <div className="bg-destructive/15 text-destructive p-4 rounded-lg max-w-2xl mx-auto">
-          <h2 className="text-lg font-semibold mb-2">Unable to load industry insights</h2>
+          <h2 className="text-lg font-semibold mb-2">
+            Unable to load industry insights
+          </h2>
           <p>{error.message || "Please try again later."}</p>
         </div>
       </div>

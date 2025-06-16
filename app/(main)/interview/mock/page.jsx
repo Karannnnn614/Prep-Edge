@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Quiz from "../_components/quiz";
 
 // Mark this page as dynamic
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function MockInterviewPage() {
   return (

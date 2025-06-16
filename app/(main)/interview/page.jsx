@@ -4,7 +4,7 @@ import PerformanceChart from "./_components/performace-chart";
 import QuizList from "./_components/quiz-list";
 
 // Mark this page as dynamic
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function InterviewPrepPage() {
   const assessments = await getAssessments();

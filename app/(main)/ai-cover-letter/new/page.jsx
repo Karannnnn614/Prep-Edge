@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import CoverLetterGenerator from "../_components/cover-letter-generator";
 
 // Mark this page as dynamic
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function NewCoverLetterPage() {
   return (

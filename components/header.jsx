@@ -20,14 +20,14 @@ import Image from "next/image";
 import { checkUser } from "@/lib/checkUser";
 
 // Add dynamic marker to tell Next.js this is a dynamic component
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Header() {
   // We'll try to get the user, but handle the case where we're in a static context
   try {
     await checkUser();
   } catch (error) {
-    console.log('Header rendered in static context');
+    console.log("Header rendered in static context");
   }
 
   return (

@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 // Allow the root layout to dynamically render since it contains the Header
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({ children }) {
   return (

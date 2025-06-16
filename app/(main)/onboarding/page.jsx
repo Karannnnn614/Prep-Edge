@@ -4,7 +4,7 @@ import OnboardingForm from "./_components/onboarding-form";
 import { getUserOnboardingStatus } from "@/actions/user";
 
 // Mark this page as dynamic
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function OnboardingPage() {
   // Check if user is already onboarded
