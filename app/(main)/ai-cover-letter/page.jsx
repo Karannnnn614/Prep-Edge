@@ -4,6 +4,9 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CoverLetterList from "./_components/cover-letter-list";
 
+// Mark this page as dynamic
+export const dynamic = 'force-dynamic';
+
 export default async function CoverLetterPage() {
   const coverLetters = await getCoverLetters();
 
