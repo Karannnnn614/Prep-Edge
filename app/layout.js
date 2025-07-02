@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
             <main className="min-h-screen">{children}</main>
             <Toaster richColors />
 
-            <footer className="bg-muted/50 py-12">
+            <footer className="bg-muted/50 py-10">
               <div className="container mx-auto px-4 text-center text-gray-200">
                 <p>Copyright © 2025 PrepEdge All rights reserved.</p>
               </div>
