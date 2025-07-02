@@ -9,13 +9,22 @@ export async function updateUser(data) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
-
   try {
+    // First try to find the user
+    let user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    // If user doesn't exist, create them first
+    if (!user) {
+      const { checkUser } = await import("@/lib/checkUser");
+      user = await checkUser(); // This will create the user if they don't exist
+
+      if (!user) {
+        throw new Error("Failed to create user");
+      }
+    }
+
     // Start a transaction to handle both operations
     const result = await db.$transaction(
       async (tx) => {
@@ -71,21 +80,29 @@ export async function getUserOnboardingStatus() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
-
   try {
-    const user = await db.user.findUnique({
-      where: {
-        clerkUserId: userId,
-      },
+    // First try to find the user
+    let user = await db.user.findUnique({
+      where: { clerkUserId: userId },
       select: {
         industry: true,
       },
     });
+
+    // If user doesn't exist, create them first
+    if (!user) {
+      // Import checkUser to create the user
+      const { checkUser } = await import("@/lib/checkUser");
+      await checkUser(); // This will create the user if they don't exist
+
+      // Now try to find the user again
+      user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+        select: {
+          industry: true,
+        },
+      });
+    }
 
     return {
       isOnboarded: !!user?.industry,
