@@ -3,8 +3,6 @@
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
   {
-    extends: [
-      'next/core-web-vitals'
-    ]
-  }
+    extends: ["next/core-web-vitals"],
+  },
 ];

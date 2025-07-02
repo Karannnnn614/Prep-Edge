@@ -17,22 +17,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-import { checkUser } from "@/lib/checkUser";
 
 // Add dynamic marker to tell Next.js this is a dynamic component
 export const dynamic = "force-dynamic";
 
-export default async function Header() {
-  // We'll try to get the user, but handle the case where we're in a static context
-  try {
-    await checkUser();
-  } catch (error) {
-    console.log("Header rendered in static context");
-  }
+export default function Header() {
+  // Remove the checkUser call from the header component
+  // The authentication state will be handled by Clerk's components
 
   return (
     <header className="fixed top-0 w-full border-b bg-background/80  backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between bg-slate-900/80">
+      <nav className="container mx-auto px-4 h-14 flex items-center justify-between bg-white/15">
         {" "}
         <Link href="/">
           <Image
