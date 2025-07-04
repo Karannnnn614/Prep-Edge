@@ -32,7 +32,7 @@ export default function Header() {
         <Link href="/">
           <Image
             src={"/logo.png"}
-            alt="Sensai Logo"
+            alt="PrepEdge Logo"
             width={200}
             height={60}
             className="h-20 w-auto object-contain"
