@@ -8,8 +8,6 @@ const isPublicRoute = createRouteMatcher([
   "/api(.*)",
 ]);
 
-const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
-
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 

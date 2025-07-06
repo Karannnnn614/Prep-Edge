@@ -52,26 +52,37 @@ const OnboardingForm = ({ industries }) => {
 
   const onSubmit = async (values) => {
     try {
+      console.log("Submitting onboarding form with values:", values);
+
       const formattedIndustry = `${values.industry}-${values.subIndustry
         .toLowerCase()
         .replace(/ /g, "-")}`;
 
-      await updateUserFn({
+      const submitData = {
         ...values,
         industry: formattedIndustry,
-      });
+      };
+
+      console.log("Formatted data for submission:", submitData);
+
+      await updateUserFn(submitData);
     } catch (error) {
       console.error("Onboarding error:", error);
+      toast.error("Failed to update profile. Please try again.");
     }
   };
 
   useEffect(() => {
+    console.log("Update result:", updateResult, "Loading:", updateLoading);
+
     if (updateResult?.success && !updateLoading) {
       toast.success("Profile completed successfully!");
       router.push("/dashboard");
       router.refresh();
+    } else if (updateResult?.error && !updateLoading) {
+      toast.error(updateResult.error || "Failed to update profile");
     }
-  }, [updateResult, updateLoading]);
+  }, [updateResult, updateLoading, router]);
 
   const watchIndustry = watch("industry");
 
