@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 export default async function RedirectPage() {
   try {
     // Add a small delay to ensure session is established
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     const { userId } = await auth();
 
@@ -24,6 +24,7 @@ export default async function RedirectPage() {
       redirect("/onboarding");
     }
   } catch (error) {
+    console.error("RedirectPage: Error occurred:", error);
     // On any error, redirect to onboarding as fallback
     redirect("/onboarding");
   }

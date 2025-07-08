@@ -76,3 +76,4 @@ scripts/auth-redirect-fix.js
 scripts/check-env-vars.js
 scripts/test-direct-db.js
 scripts/check-users.js
+scripts/test-onboarding-logic.js

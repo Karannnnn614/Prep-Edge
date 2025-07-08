@@ -87,10 +87,14 @@ export async function getUserOnboardingStatus() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
+  console.log("getUserOnboardingStatus called for userId:", userId);
+
   try {
     // Use safe database operation with fallback
     const result = await safeDbOperation(
       async () => {
+        console.log("Attempting to find user with clerkUserId:", userId);
+        
         // First try to find the user
         let user = await db.user.findUnique({
           where: { clerkUserId: userId },
@@ -99,8 +103,11 @@ export async function getUserOnboardingStatus() {
           },
         });
 
+        console.log("Found user:", user);
+
         // If user doesn't exist, create them first
         if (!user) {
+          console.log("User not found, creating user...");
           // Import checkUser to create the user
           const { checkUser } = await import("@/lib/checkUser");
           await checkUser(); // This will create the user if they don't exist
@@ -112,15 +119,21 @@ export async function getUserOnboardingStatus() {
               industry: true,
             },
           });
+          console.log("User after creation:", user);
         }
 
+        const isOnboarded = !!user?.industry;
+        console.log("Industry value:", user?.industry);
+        console.log("isOnboarded result:", isOnboarded);
+
         return {
-          isOnboarded: !!user?.industry,
+          isOnboarded,
         };
       },
       { isOnboarded: false }
     ); // Fallback to not onboarded if database fails
 
+    console.log("Final result:", result);
     return result;
   } catch (error) {
     console.error("Error checking onboarding status:", error);
