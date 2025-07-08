@@ -65,7 +65,10 @@ const OnboardingForm = ({ industries }) => {
 
       console.log("Formatted data for submission:", submitData);
 
-      await updateUserFn(submitData);
+      const result = await updateUserFn(submitData);
+      console.log("Update result:", result);
+      
+      // The result handling is done in the useEffect, so we don't need to handle it here
     } catch (error) {
       console.error("Onboarding error:", error);
       toast.error("Failed to update profile. Please try again.");
@@ -75,12 +78,14 @@ const OnboardingForm = ({ industries }) => {
   useEffect(() => {
     console.log("Update result:", updateResult, "Loading:", updateLoading);
 
-    if (updateResult?.success && !updateLoading) {
-      toast.success("Profile completed successfully!");
-      router.push("/dashboard");
-      router.refresh();
-    } else if (updateResult?.error && !updateLoading) {
-      toast.error(updateResult.error || "Failed to update profile");
+    if (updateResult && !updateLoading) {
+      if (updateResult.success) {
+        toast.success("Profile completed successfully!");
+        router.push("/dashboard");
+        router.refresh();
+      } else if (updateResult.error) {
+        toast.error(updateResult.error || "Failed to update profile");
+      }
     }
   }, [updateResult, updateLoading, router]);
 
