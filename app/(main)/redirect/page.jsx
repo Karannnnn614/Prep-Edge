@@ -2,30 +2,24 @@ import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function RedirectPage() {
-  try {
-    // Add a small delay to ensure session is established
-    await new Promise((resolve) => setTimeout(resolve, 200));
+  // Add a small delay to ensure session is established
+  await new Promise((resolve) => setTimeout(resolve, 200));
 
-    const { userId } = await auth();
+  const { userId } = await auth();
 
-    if (!userId) {
-      // If no user, redirect to sign-in
-      redirect("/sign-in");
-      return;
-    }
+  if (!userId) {
+    // If no user, redirect to sign-in
+    redirect("/sign-in");
+    return;
+  }
 
-    // Import and use the getUserOnboardingStatus function
-    const { getUserOnboardingStatus } = await import("@/actions/user");
-    const { isOnboarded } = await getUserOnboardingStatus();
+  // Import and use the getUserOnboardingStatus function
+  const { getUserOnboardingStatus } = await import("@/actions/user");
+  const { isOnboarded } = await getUserOnboardingStatus();
 
-    if (isOnboarded) {
-      redirect("/dashboard");
-    } else {
-      redirect("/onboarding");
-    }
-  } catch (error) {
-    console.error("RedirectPage: Error occurred:", error);
-    // On any error, redirect to onboarding as fallback
+  if (isOnboarded) {
+    redirect("/dashboard");
+  } else {
     redirect("/onboarding");
   }
 }
