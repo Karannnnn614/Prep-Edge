@@ -73,3 +73,6 @@ app/(main)/debug-redirect/
 scripts/test-auth-flow.js
 scripts/auth-performance-fix.js
 scripts/auth-redirect-fix.js
+scripts/check-env-vars.js
+scripts/test-direct-db.js
+scripts/check-users.js
