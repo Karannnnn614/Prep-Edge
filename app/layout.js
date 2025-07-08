@@ -14,7 +14,7 @@ export const metadata = {
   description: "",
 };
 
-// Allow the root layout to dynamically render since it contains the Header
+// Allow the root layout to dynamically render for authentication
 export const dynamic = "force-dynamic";
 
 export default function RootLayout({ children }) {

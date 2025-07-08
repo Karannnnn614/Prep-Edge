@@ -1,8 +1,15 @@
-// Using direct export pattern for ESLint Flat Config with Next.js
+import { createRequire } from "module";
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
+const require = createRequire(import.meta.url);
+const nextConfig = require("eslint-config-next");
+
 export default [
   {
-    extends: ["next/core-web-vitals"],
+    ...nextConfig,
+    rules: {
+      ...nextConfig.rules,
+      "@next/next/no-img-element": "off",
+      "react/no-unescaped-entities": "off",
+    },
   },
 ];

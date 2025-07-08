@@ -1,13 +1,21 @@
 {
   "name": "Prep-Edge",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:db": "node scripts/simple-db-test.js",
+    "check:env": "node scripts/check-env.js",
+    "validate:neon": "node scripts/validate-neon-url.js",
+    "verify:setup": "node scripts/verify-setup.js",
+    "production:ready": "node scripts/production-ready-check.js",
+    "db:reset": "prisma db push --force-reset",
+    "db:seed": "prisma db seed",
+    "health": "curl http://localhost:3000/api/health || echo 'Server not running'"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.9.10",
@@ -28,12 +36,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.1.0",
     "framer-motion": "^11.0.3",
     "html2pdf.js": "^0.10.2",
     "inngest": "^3.29.3",
     "lucide-react": "^0.471.1",
-    "next": "15.1.4",
+    "next": "^15.3.5",
     "next-themes": "^0.4.4",
+    "pg": "^8.16.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
@@ -46,7 +56,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.1",
     "@prisma/client": "^6.8.2",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",

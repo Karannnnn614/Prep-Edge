@@ -39,3 +39,38 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Guide files and diagnostic scripts - do not commit to repository
+*_GUIDE.md
+*_SETUP.md
+*DEPLOYMENT*.md
+NEON_SETUP_GUIDE.md
+COMPLETE_NEON_SETUP.md
+PRODUCTION_DEPLOYMENT_GUIDE.md
+scripts/check-env.js
+scripts/validate-neon-url.js
+scripts/test-db-connection.js
+scripts/simple-db-test.js
+scripts/quick-db-test.js
+scripts/production-ready-check.js
+scripts/deploy-ready.js
+scripts/cleanup-duplicates.js
+test-*.js
+
+# Development/debugging components and APIs - not needed in production
+components/database-status.jsx
+app/api/health/
+scripts/fix-clerk-clock.js
+scripts/route-health-check.js
+SESSION_MANAGEMENT.md
+lib/session-config.js
+components/session-manager.jsx
+scripts/session-summary.js
+scripts/pre-deployment-test.js
+scripts/critical-test.js
+scripts/auth-debug.js
+app/(main)/debug-redirect/
+scripts/test-auth-flow.js
+scripts/auth-performance-fix.js
+scripts/auth-redirect-fix.js
+components/auth-redirect.jsx

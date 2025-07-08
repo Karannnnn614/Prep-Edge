@@ -6,22 +6,28 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api(.*)",
+  "/redirect",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  try {
+    const { userId } = await auth();
 
-  // Allow public routes
-  if (isPublicRoute(req)) {
+    // Allow public routes
+    if (isPublicRoute(req)) {
+      return NextResponse.next();
+    }
+
+    // Redirect unauthenticated users to sign-in
+    if (!userId) {
+      return NextResponse.redirect(new URL("/sign-in", req.url));
+    }
+
     return NextResponse.next();
-  }
-
-  // Redirect unauthenticated users to sign-in
-  if (!userId) {
+  } catch (error) {
+    // For any error, redirect to sign-in
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
-
-  return NextResponse.next();
 });
 
 export const config = {

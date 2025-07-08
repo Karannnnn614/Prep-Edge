@@ -21,10 +21,15 @@ import { features } from "@/data/features";
 import { testimonial } from "@/data/testimonial";
 import { faqs } from "@/data/faqs";
 import { howItWorks } from "@/data/howItWorks";
+import AuthRedirect from "@/components/auth-redirect";
 
 export default function LandingPage() {
+  // Authentication redirect is now handled by client-side AuthRedirect component
+  // This prevents hydration mismatch and server/client conflicts
+
   return (
     <>
+      <AuthRedirect />
       <div className="grid-background"></div>
 
       {/* Hero Section */}

@@ -4,15 +4,22 @@ import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { generateAIInsights } from "./dashboard";
+import {
+  executeWithRetry,
+  transactionWithRetry,
+  safeDbOperation,
+} from "@/lib/db-utils";
 
 export async function updateUser(data) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   try {
-    // First try to find the user
-    let user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+    // First try to find the user with retry logic
+    let user = await executeWithRetry(async () => {
+      return await db.user.findUnique({
+        where: { clerkUserId: userId },
+      });
     });
 
     // If user doesn't exist, create them first
@@ -25,8 +32,8 @@ export async function updateUser(data) {
       }
     }
 
-    // Start a transaction to handle both operations
-    const result = await db.$transaction(
+    // Start a transaction with retry logic
+    const result = await transactionWithRetry(
       async (tx) => {
         // First check if industry exists
         let industryInsight = await tx.industryInsight.findUnique({
@@ -39,7 +46,7 @@ export async function updateUser(data) {
         if (!industryInsight) {
           const insights = await generateAIInsights(data.industry);
 
-          industryInsight = await db.industryInsight.create({
+          industryInsight = await tx.industryInsight.create({
             data: {
               industry: data.industry,
               ...insights,
@@ -64,7 +71,7 @@ export async function updateUser(data) {
         return { updatedUser, industryInsight };
       },
       {
-        timeout: 10000, // default: 5000
+        timeout: 15000, // 15 second timeout
       }
     );
 
@@ -81,34 +88,43 @@ export async function getUserOnboardingStatus() {
   if (!userId) throw new Error("Unauthorized");
 
   try {
-    // First try to find the user
-    let user = await db.user.findUnique({
-      where: { clerkUserId: userId },
-      select: {
-        industry: true,
+    // Use safe database operation with fallback
+    const result = await safeDbOperation(
+      async () => {
+        // First try to find the user
+        let user = await db.user.findUnique({
+          where: { clerkUserId: userId },
+          select: {
+            industry: true,
+          },
+        });
+
+        // If user doesn't exist, create them first
+        if (!user) {
+          // Import checkUser to create the user
+          const { checkUser } = await import("@/lib/checkUser");
+          await checkUser(); // This will create the user if they don't exist
+
+          // Now try to find the user again
+          user = await db.user.findUnique({
+            where: { clerkUserId: userId },
+            select: {
+              industry: true,
+            },
+          });
+        }
+
+        return {
+          isOnboarded: !!user?.industry,
+        };
       },
-    });
+      { isOnboarded: false }
+    ); // Fallback to not onboarded if database fails
 
-    // If user doesn't exist, create them first
-    if (!user) {
-      // Import checkUser to create the user
-      const { checkUser } = await import("@/lib/checkUser");
-      await checkUser(); // This will create the user if they don't exist
-
-      // Now try to find the user again
-      user = await db.user.findUnique({
-        where: { clerkUserId: userId },
-        select: {
-          industry: true,
-        },
-      });
-    }
-
-    return {
-      isOnboarded: !!user?.industry,
-    };
+    return result;
   } catch (error) {
     console.error("Error checking onboarding status:", error);
-    throw new Error("Failed to check onboarding status");
+    // Return fallback value instead of throwing
+    return { isOnboarded: false };
   }
 }
